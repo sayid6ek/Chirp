@@ -1,6 +1,15 @@
 import { InferSchemaType, model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
+const reservedUsernames = [
+  "login",
+  "signup",
+  "search",
+  "notifications",
+  "messages",
+  "settings",
+];
+
 const userSchema = new Schema(
   {
     name: {
@@ -17,6 +26,13 @@ const userSchema = new Schema(
       minlength: 4,
       maxlength: 15,
       match: /^[a-zA-Z0-9_]+$/,
+      validate: {
+        validator: function (value: string) {
+          return !reservedUsernames.includes(value.toLowerCase());
+        },
+        message: (props: { value: string }) =>
+          `${props.value} is a reserved username. Please choose another one.`,
+      },
     },
     email: {
       type: String,

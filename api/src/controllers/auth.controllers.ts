@@ -3,16 +3,6 @@ import { Request, Response } from "express";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generate.token.js";
 
-export const checkAuth = asyncHandler(async (req: Request, res: Response) => {
-  const user = await User.findById(req.userId);
-  if (!user) {
-    res.status(401);
-    throw new Error("Not authorized, token is invalid.");
-  }
-
-  res.status(200).json({ userId: user.id });
-});
-
 export const signup = asyncHandler(async (req: Request, res: Response) => {
   const { name, username, email, password } = req.body;
 
